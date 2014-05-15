@@ -2,7 +2,6 @@ fmddisc <-
 function (file, header = FALSE, colid = 1, nrep = 200, title = "fmddisc") 
 {
     delta = 0.1
-    library(bootstrap)
     "mbass" <- function(a, delta = 0.1, plot = TRUE, alldisc = FALSE, 
         bs = 0) {
         mba <- function(x) {

@@ -15,8 +15,8 @@ catalogs.
 \tabular{ll}{
 Package: \tab GRTo\cr
 Type: \tab Package\cr
-Version: \tab 1.1\cr
-Date: \tab 2010-09-22\cr
+Version: \tab 1.2\cr
+Date: \tab 2014-05-15\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
@@ -38,6 +38,9 @@ Zurn, W. and Rydelek, P. A. (1996) Revisiting the phasor-walkout method for deta
 }
 \keyword{ package }
 %\seealso{}
+\note{
+Thanks to Paul Friberg for telling us about the bug in the graphical part of bvmed.R. Thanks to Scott Kostyshak for telling us about the extra bootstrap package dependency. GRTo version 1.2 fixes these issues.
+}
 \examples{
 # Comparison of the b-value for the IDYLLdeep data set.
     BBootComp(finame1=system.file("extdata","IDYLLdeep.data.txt",package="GRTo"),

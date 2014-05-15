@@ -287,7 +287,7 @@ function (finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE,
         sd1 = randomisation$sd
         m01 = randomisation$m0
     }
-    return(randomisation)
+    print(randomisation)
     if (plot) {
         minmag <- min(m1, na.rm = TRUE)
         maxmag <- max(m1, na.rm = TRUE)

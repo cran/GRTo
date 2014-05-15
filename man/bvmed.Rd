@@ -41,6 +41,9 @@ Siegel, A.F., "Robust regression using repeated medians", \emph{Biometrika} (198
 
 Maintainer: Daniel Amorese <amorese@ipgp.fr>
 }
+\note{
+Thanks to Paul Friberg for telling us about the bug in the graphical part of bvmed.R. Thanks to Scott Kostyshak for telling us about the extra bootstrap package dependency. GRTo version 1.2 fixes these issues.
+}
 \examples{
 bvmed(file=system.file("extdata","IDYLLdeep.data.txt",package="GRTo"), colid = 15, nrep = 150, 
 tm = NULL, findtm = TRUE, title = "IDYLLWILD")

@@ -37,6 +37,9 @@ used.
 D. Amorese, "Applying a change-point detection method on frequency-magnitude distributions", \emph{Bull. seism. Soc. Am.} (2007) 97, doi:10.1785\/0120060181
 }
 \author{ Daniel Amorese }
+\note{
+Thanks to Scott Kostyshak for telling us about the extra bootstrap package dependency. GRTo version 1.2 fixes this issue.
+}
 \examples{
 fmddisc(file=system.file("extdata","IDYLLdeep.data.txt",package="GRTo"),
 header=FALSE,colid=15,nrep=200,"FMD mag discontinuities")

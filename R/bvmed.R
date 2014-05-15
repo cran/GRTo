@@ -185,8 +185,7 @@ function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL,
         }
         invisible(res)
     }
-    library(bootstrap)
-    cat("\nThe R bootstrap packages is necessary\n")
+    cat("\nThe R bootstrap package is necessary\n")
     x = read.table(file, header = hd)
     a = x[, colid]
     a = round(a, 1)
@@ -235,12 +234,12 @@ function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL,
     b = bvm$brm
     sd = bvm$bse
     epsi = 1e-05
-    nthr = z0$Y[which(abs(z0$X - bvm$mmed) < epsi)]
+    nthr = z1$Y[which(abs(z1$X - bvm$mmed) < epsi)]
     A = nthr + b * bvm$mmed
     nmag = sum(a >= bvm$mmed)
     w = bvm$mmed
-    segments(bvm$mmed, 10^(A - b * bvm$mmed), max(z0$X), 10^(A - 
-        b * max(z0$X)), col = "red", lwd = 2)
+    segments(bvm$mmed, 10^(A - b * bvm$mmed), max(z1$X), 10^(A - 
+        b * max(z1$X)), col = "red", lwd = 2)
     dm = max(mval) - min(mval)
     dn = max(10^nval) - min(10^nval)
     posx = min(mval) + 0.44 * dm
