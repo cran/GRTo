@@ -15,8 +15,8 @@ catalogs.
 \tabular{ll}{
 Package: \tab GRTo\cr
 Type: \tab Package\cr
-Version: \tab 1.2\cr
-Date: \tab 2014-05-15\cr
+Version: \tab 1.3\cr
+Date: \tab 2015-09-16\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
@@ -39,7 +39,7 @@ Zurn, W. and Rydelek, P. A. (1996) Revisiting the phasor-walkout method for deta
 \keyword{ package }
 %\seealso{}
 \note{
-Thanks to Paul Friberg for telling us about the bug in the graphical part of bvmed.R. Thanks to Scott Kostyshak for telling us about the extra bootstrap package dependency. GRTo version 1.2 fixes these issues.
+Thanks to Paul Friberg (ISTI) for telling us about the bug in the graphical part of bvmed.R. Thanks to Scott Kostyshak (Princeton University) for telling us about the extra bootstrap package dependency. GRTo version 1.2 fixes the issues reported by Paul and Scott. Thanks to Andrew Barbour (USGS) for detecting and fixing minor problems of bvmed.R of version 1.2. In version 1.3, the b-value and an optional staircase line FMD are displayed by BBootComp when a single magnitude file is processed. Version 1.3 also fixes a bug with negative magnitude values. In version 1.3, an option coded by Andrew Barbour allows the processing of data from a list. Willy Aspinall (University of Bristol) highlights bugs in the graphical parts of bvmed and BBootComp: An inappropriate magnitude shift in FMD plots is definitely fixed in version 1.3. Many thanks to Willy! 
 }
 \examples{
 # Comparison of the b-value for the IDYLLdeep data set.

@@ -1,5 +1,5 @@
 bvmed <-
-function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL, 
+function (file, lis, hd = FALSE, colid = 1, nrep = 200, tm = NULL, 
     findtm = TRUE, title = "bvmed") 
 {
     delta = 0.1
@@ -96,8 +96,9 @@ function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL,
         n <- length(g_r$density)
         xc <- seq(minmag, max(a, na.rm = TRUE), delta)[1:(n - 
             1)]
-        log_nc <- log10((1/delta) * (length(a) - cumsum(g_r$counts)[1:(n - 
-            1)]) * delta)
+        y = numeric()
+        for (i in 1:length(xc)) y[i] = sum(a >= xc[i])
+        log_nc = log10(y)
         x <- seq(minmag, max(a, na.rm = TRUE), delta)
         log_n <- log10((1/delta) * g_r$counts * delta)
         x <- x[is.finite(log_n)]
@@ -177,17 +178,27 @@ function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL,
         mba <- function(x) {
             fmbass2(x, delta, alldisc, tm, findtm)
         }
-        if (bs == 0) {
-            res <- mba(a)
+        res <- if (bs == 0) {
+            mba(a)
         }
         else {
-            res = bootstrap(a, bs, mba)
+            bootstrap::bootstrap(a, bs, mba)
         }
-        invisible(res)
+        return(res)
     }
     cat("\nThe R bootstrap package is necessary\n")
-    x = read.table(file, header = hd)
-    a = x[, colid]
+    no.file <- missing(file)
+    no.lis <- missing(lis)
+    a <- if (no.file) {
+        as.vector(lis)
+    }
+    else if (no.lis) {
+        x = read.table(file, header = hd)
+        x[, colid]
+    }
+    else {
+        stop("must specify either 'file' or 'lis'")
+    }
     a = round(a, 1)
     cat("\n...You just have to wait...\n")
     z = mbass2(a, delta = delta, alldisc = FALSE, bs = nrep, 
@@ -221,7 +232,6 @@ function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL,
     bvm$brm = round(z0$coef, 3)
     bvm$bse = round(sd(bvalue, na.rm = TRUE), 3)
     bvm$bme = round(1.645 * sd(bvalue, na.rm = TRUE), 3)
-    bvm
     z1 = mbass2(a, delta = delta, alldisc = FALSE, bs = 0, tm = NULL, 
         findtm = FALSE)
     figname = paste(title, "_bvmed.png", sep = "")
@@ -233,6 +243,8 @@ function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL,
         pch = 1, cex.lab = 1.5, cex.axis = 1.2)
     b = bvm$brm
     sd = bvm$bse
+    print(mval)
+    print(10^nval)
     epsi = 1e-05
     nthr = z1$Y[which(abs(z1$X - bvm$mmed) < epsi)]
     A = nthr + b * bvm$mmed
@@ -251,7 +263,9 @@ function (file, hd = FALSE, colid = 1, nrep = 200, tm = NULL,
         cex = 1.3, pos = 4)
     text(posx + 0.155 * dm, posy - 0.35 * dn, expression(" " %+-% 
         " "), font = 1, cex = 1.3, pos = 4)
+    dev.off()
     cat("\nb-value=", b, "with standard-error", sd, "\nCalculation over", 
         nmag, "magnitude values\n\n")
     cat("\nPlot in", figname, "\n\n")
+    return(invisible(bvm))
 }

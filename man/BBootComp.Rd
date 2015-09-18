@@ -8,7 +8,7 @@
 BBootComp(finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE, 
 hd2 = FALSE, nrep = 5000, alter = c("two.sided", "less", "greater"), 
 tm1 = NULL, tm2 = NULL, findtm1 = TRUE, findtm2 = TRUE, plot = FALSE, 
-title = "BootComp")
+title = "BootComp",oplt="p")
 }
 \arguments{
   \item{finame1}{ a character string specifying the first file to be loaded }
@@ -25,6 +25,7 @@ title = "BootComp")
   \item{findtm2}{ logical. Whether an automatic procedure is engaged to determine the threshold magnitude value \code{tm2} or not }
   \item{plot}{ logical. If \code{TRUE}, a FMD plot is drawn. Default is \code{plot} equals \code{FALSE} } 
   \item{title}{ character. The title of the plot. The name for the PNG file that includes the plot begins with \code{title} } 
+  \item{oplt}{ character. Option for the plot. If \code{oplt} is "p", the FMD displays points (open triangles), else it shows a staircase. This option applies only to the plot of a single FMD: When 2 FMDs are compared, they are always shown with point symbols } 
 }
 \details{
   if 'finame2' is not NULL, this function compares 2 sets of magnitude values that are contained

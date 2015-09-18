@@ -11,7 +11,7 @@ function (file, header = FALSE, colid = 1, nrep = 200, title = "fmddisc")
             res <- mba(a)
         }
         else {
-            res = bootstrap(a, abs(bs), mba)
+            res = bootstrap::bootstrap(a, abs(bs), mba)
             if (bs > 0) {
                 res = quantile(res$thetastar, probs = c(0.05, 
                   0.5, 0.95), na.rm = TRUE)

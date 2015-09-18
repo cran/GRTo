@@ -2,7 +2,7 @@ BBootComp <-
 function (finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE, 
     hd2 = FALSE, nrep = 5000, alter = c("two.sided", "less", 
         "greater"), tm1 = NULL, tm2 = NULL, findtm1 = TRUE, findtm2 = TRUE, 
-    plot = FALSE, title = "BootComp") 
+    plot = FALSE, title = "BootComp", oplt = "p") 
 {
     alter <- match.arg(alter)
     rd = 1
@@ -17,8 +17,6 @@ function (finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE,
         n <- length(g_r$density)
         xc <- round(seq(minmag, max(a, na.rm = TRUE), delta)[1:(n - 
             1)], 3)
-        log_nc <- log10((1/delta) * (length(a) - cumsum(g_r$counts)[1:(n - 
-            1)]) * delta)
         x <- round(seq(minmag, max(a, na.rm = TRUE), delta), 
             3)
         log_n <- log10((1/delta) * g_r$counts * delta)
@@ -296,9 +294,8 @@ function (finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE,
         n <- length(g_r$density)
         xc1 <- round(seq(minmag, max(m1, na.rm = TRUE), bw)[1:(n - 
             1)], 3)
-        log_nc1 <- log10((1/bw) * (length(m1) - cumsum(g_r$counts)[1:(n - 
-            1)]) * bw)
-        y1 = 10^log_nc1
+        y1 = numeric()
+        for (i in 1:length(xc1)) y1[i] = sum(m1 >= xc1[i])
         if (!is.null(finame2)) {
             minmag <- min(m2, na.rm = TRUE)
             maxmag <- max(m2, na.rm = TRUE)
@@ -307,9 +304,8 @@ function (finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE,
             n <- length(g_r$density)
             xc2 <- round(seq(minmag, max(m2, na.rm = TRUE), bw)[1:(n - 
                 1)], 3)
-            log_nc2 <- log10((1/bw) * (length(m2) - cumsum(g_r$counts)[1:(n - 
-                1)]) * bw)
-            y2 = 10^log_nc2
+            y2 = numeric()
+            for (i in 1:length(xc2)) y2[i] = sum(m2 >= xc2[i])
         }
         figname = paste(title, "_fig.png", sep = "")
         png(filename = figname, width = 2400, height = 2715, 
@@ -325,11 +321,28 @@ function (finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE,
             ind2 = which(round(xc2, 6) == m02)
             A2 = log10(y2[ind2]) + b2 * m02
         }
-        else plot(xc1, y1, type = "p", ylim = c(min(y1), max(y1)), 
-            xlim = c(min(xc1), max(xc1)), log = "y", xlab = "Magnitude", 
-            ylab = "Cumulative number of events", pch = 2, cex.lab = 1.3)
+        else {
+            if (oplt == "p") {
+                plot(xc1, y1, type = "p", ylim = c(min(y1), max(y1)), 
+                  xlim = c(min(xc1), max(xc1)), log = "y", xlab = "Magnitude", 
+                  ylab = "Cumulative number of events", pch = 2, 
+                  cex.lab = 1.3)
+            }
+            else {
+                plot(xc1, y1, type = "n", ylim = c(min(y1), max(y1)), 
+                  xlim = c(min(xc1), max(xc1)), log = "y", xlab = "Magnitude", 
+                  ylab = "Cumulative number of events", pch = 2, 
+                  cex.lab = 1.3)
+                bwfanc = 0.05
+                xcmoins = xc1 - bwfanc
+                xcplus = xc1 + bwfanc
+                xfanc = sort(c(xcmoins, xcplus))
+                yfanc = rep(y1, each = 2)
+                lines(xfanc, yfanc, lwd = 2)
+            }
+        }
         segments(m01, 10^(A1 - b1 * m01), max(xc1), 10^(A1 - 
-            b1 * max(xc1)), lwd = 2)
+            b1 * max(xc1)), lwd = 3)
         if (!is.null(finame2)) {
             segments(m02, 10^(A2 - b2 * m02), max(xc2), 10^(A2 - 
                 b2 * max(xc2)), lwd = 2)
@@ -355,10 +368,18 @@ function (finame1, finame2 = NULL, colid1 = 1, colid2 = 1, hd1 = FALSE,
             posy = min(y1) + 0.75 * dn
         }
         text(posx, posy, title, font = 2, cex = 2, pos = 4)
-        text(posx, posy - 0.4 * dn, paste("b (triangle) = ", 
-            formatC(round(b1, 2), digits = 2, width = 4, format = "f"), 
-            "   ", formatC(round(sd1, 2), digits = 2, width = 4, 
-                format = "f")), font = 1, cex = 1.3, pos = 4)
+        if (!is.null(finame2)) 
+            text(posx, posy - 0.4 * dn, paste("b (triangle) = ", 
+                formatC(round(b1, 2), digits = 2, width = 4, 
+                  format = "f"), "   ", formatC(round(sd1, 2), 
+                  digits = 2, width = 4, format = "f")), font = 1, 
+                cex = 1.3, pos = 4)
+        if (is.null(finame2)) 
+            text(posx, posy - 0.4 * dn, paste("  b - value  = ", 
+                formatC(round(b1, 2), digits = 2, width = 4, 
+                  format = "f"), "   ", formatC(round(sd1, 2), 
+                  digits = 2, width = 4, format = "f")), font = 1, 
+                cex = 1.3, pos = 4)
         text(posx + 0.35 * dm, posy - 0.4 * dn, expression(" " %+-% 
             " "), font = 1, cex = 1.3, pos = 4)
         dev.off()
